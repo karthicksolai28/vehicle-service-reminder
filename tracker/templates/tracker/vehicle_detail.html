@@ -1,0 +1,44 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+  <h2>{{ vehicle.name }} <span class="muted">({{ vehicle.number }})</span></h2>
+
+  <div class="actions">
+    <a class="btn btn-small" href="{% url 'vehicle_edit' vehicle.pk %}">Edit Vehicle</a>
+    <a class="btn btn-small btn-danger" href="{% url 'vehicle_delete' vehicle.pk %}">Delete Vehicle</a>
+  </div>
+
+  {% if vehicle.last_service %}
+    <div class="due-box">
+      <p><strong>Next service date:</strong> {{ vehicle.next_due_date }}</p>
+      <p><strong>Next service km:</strong> {{ vehicle.next_due_km }} km</p>
+      <p>
+        {% if vehicle.days_left < 0 %}
+          <span class="badge badge-overdue" style="margin-left:0">{{ vehicle.days_left|cut:"-" }} naal overdue</span>
+        {% else %}
+          <span class="badge badge-ok" style="margin-left:0">{{ vehicle.days_left }} naal irukku</span>
+        {% endif %}
+      </p>
+    </div>
+  {% else %}
+    <p class="muted">Service record add panna next due date inga theriyum.</p>
+  {% endif %}
+
+  <a class="btn" href="{% url 'service_add' vehicle.pk %}">+ Add Service</a>
+
+  <ul class="items">
+    {% for r in records %}
+      <li>
+        <strong>{{ r.service_date }}</strong> - {{ r.km_reading }} km - ₹{{ r.cost }}
+        {% if r.notes %}<br><span class="muted">{{ r.notes }}</span>{% endif %}
+        <div class="actions">
+          <a href="{% url 'service_edit' r.pk %}">Edit</a>
+          <a href="{% url 'service_delete' r.pk %}" class="text-danger">Delete</a>
+        </div>
+      </li>
+    {% empty %}
+      <li class="muted">Innum service record illa.</li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'vehicle_list' %}">← Back to vehicles</a>
+{% endblock %}

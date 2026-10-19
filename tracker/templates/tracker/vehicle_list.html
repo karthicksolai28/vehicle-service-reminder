@@ -1,0 +1,34 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+  <h2>My Vehicles</h2>
+
+  <form method="get" class="search-form">
+    <input type="text" name="q" value="{{ q }}" placeholder="Name or number search pannunga...">
+    <button type="submit">Search</button>
+    {% if q %}<a href="{% url 'vehicle_list' %}">Clear</a>{% endif %}
+  </form>
+
+  <a class="btn" href="{% url 'vehicle_add' %}">+ Add Vehicle</a>
+
+  <ul class="items">
+    {% for v in vehicles %}
+      <li>
+        <a href="{% url 'vehicle_detail' v.pk %}"><strong>{{ v.name }}</strong></a>
+        - {{ v.number }} <span class="muted">({{ v.vehicle_type }})</span>
+        {% if v.status == 'Overdue' %}
+          <span class="badge badge-overdue">Overdue</span>
+        {% elif v.status == 'Due soon' %}
+          <span class="badge badge-soon">Due soon</span>
+        {% elif v.status == 'OK' %}
+          <span class="badge badge-ok">OK</span>
+        {% else %}
+          <span class="badge badge-none">No service yet</span>
+        {% endif %}
+      </li>
+    {% empty %}
+      <li class="muted">
+        {% if q %}"{{ q }}" ku match aana vehicle illa.{% else %}Innum vehicle add pannala.{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

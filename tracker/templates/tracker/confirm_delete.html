@@ -1,0 +1,10 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+  <h2>Are you sure?</h2>
+  <p>{{ message }}</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn-danger">Yes, Delete</button>
+    <a href="{% url cancel_url cancel_pk %}">Cancel</a>
+  </form>
+{% endblock %}

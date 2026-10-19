@@ -1,0 +1,53 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+  <h2>Welcome, {{ user.username }}!</h2>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num">{{ total_vehicles }}</div>
+      <div class="muted">Vehicles</div>
+    </div>
+    <div class="stat red">
+      <div class="num">{{ overdue|length }}</div>
+      <div class="muted">Overdue</div>
+    </div>
+    <div class="stat orange">
+      <div class="num">{{ due_soon|length }}</div>
+      <div class="muted">Due soon</div>
+    </div>
+    <div class="stat">
+      <div class="num">₹{{ total_spent }}</div>
+      <div class="muted">Total spent</div>
+    </div>
+  </div>
+
+  {% if overdue %}
+    <h3>Overdue</h3>
+    <ul class="items">
+      {% for v in overdue %}
+        <li>
+          <a href="{% url 'vehicle_detail' v.pk %}"><strong>{{ v.name }}</strong></a>
+          <span class="badge badge-overdue">{{ v.days_left|cut:"-" }} naal overdue</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if due_soon %}
+    <h3>Due soon</h3>
+    <ul class="items">
+      {% for v in due_soon %}
+        <li>
+          <a href="{% url 'vehicle_detail' v.pk %}"><strong>{{ v.name }}</strong></a>
+          <span class="badge badge-soon">{{ v.days_left }} naal irukku</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if not overdue and not due_soon %}
+    <p class="muted">Ippo ella vehicles-um OK. 👍</p>
+  {% endif %}
+
+  <a class="btn" href="{% url 'vehicle_list' %}">My Vehicles</a>
+{% endblock %}
