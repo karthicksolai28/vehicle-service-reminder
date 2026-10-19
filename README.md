@@ -17,7 +17,7 @@ Python, Django, SQLite, HTML, CSS
 
 ## Setup
 ```bash
-git clone <repo-url>
+git clone <git clone https://github.com/karthicksolai28/vehicle-service-reminder.git>
 cd service_reminder
 python -m venv venv
 venv\Scripts\activate
